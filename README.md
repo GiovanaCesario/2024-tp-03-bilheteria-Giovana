@@ -13,9 +13,9 @@ O sistema deverá implementar as seguintes funcionalidades:
 
 #### Cadastro de Eventos
 
-- Crie uma classe abstrata `Evento` com atributos comuns (nome, data, hora, local, quantidade de ingressos, preço do ingresso).
+- Crie uma classe abstrata `src.Evento` com atributos comuns (nome, data, hora, local, quantidade de ingressos, preço do ingresso).
 - Um evento é composto por, pelo menos, nome, data, hora, local e preço do ingresso.
-- Implemente classes concretas `Filme`, `Teatro` e `Concerto` que herdam de Evento.
+- Implemente classes concretas `Filme`, `Teatro` e `Concerto` que herdam de src.Evento.
     - O filme tem capacidade de 200 ingressos, o teatro 250, e o concerto 150.
 
 #### Venda de Ingressos
@@ -37,7 +37,7 @@ O sistema deverá implementar as seguintes funcionalidades:
 - Essa interface deverá definir dois métodos:
     - Um para calcular o valor total da receita gerada pelo objeto da classe que irá herdá-la
     - Um para exibir o extrato relacionado a receita daquele objeto.
-- Essa interface deverá ser implementada pelas classes `Evento` e `Ingresso`
+- Essa interface deverá ser implementada pelas classes `src.Evento` e `Ingresso`
 
 #### Exibição de Eventos
 
