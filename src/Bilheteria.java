@@ -32,20 +32,17 @@ public class Bilheteria {
     }
 
     //Venda de ingressos
-    public void venderIngresso(String tipoIngresso, Evento evento) {
+    public boolean venderIngresso(String tipoIngresso, Evento evento) {
 
         switch (tipoIngresso) {
             case "VIP":
-                evento.venderIngresso(new IngressoVIP(evento.getPrecoIngresso()));
-                break;
+                return evento.venderIngresso(new IngressoVIP(evento.getPrecoIngresso()));
             case "Meia Entrada" :
-                evento.venderIngresso(new IngressoMeiaEntrada(evento.getPrecoIngresso()));
-                break;
+                return evento.venderIngresso(new IngressoMeiaEntrada(evento.getPrecoIngresso()));
             case "Normal" :
-                evento.venderIngresso(new Ingresso(evento.getPrecoIngresso()));
-                break;
+                return evento.venderIngresso(new Ingresso(evento.getPrecoIngresso()));
             default:
-                break;
+                return false;
         }
     }
 

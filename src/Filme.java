@@ -19,11 +19,18 @@ public class Filme extends Evento {
     }
 
     @Override
-    public float venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
+    public boolean venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
 
         if (taDisponivel(novoIngresso.getTipo())) {
             this.ingressosVendidos.add(novoIngresso);
+            return true;
         }
-        return novoIngresso.getValor();
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Tipo: Filme\n" +
+                super.toString();
     }
 }

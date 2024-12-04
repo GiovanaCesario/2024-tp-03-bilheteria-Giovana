@@ -28,8 +28,8 @@ public class Ingresso implements IReceita{
     @Override
     public String toString() {
         return "Data: " + dataVenda +
-                " Tipo: " + tipo +
-                " Receita: " + cauculaReceita();
+                "\t\tTipo: " + tipo +
+                "\t\tReceita: " + cauculaReceita();
     }
 
     public Date getDataVenda() { return dataVenda; }

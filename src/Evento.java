@@ -19,13 +19,11 @@ public abstract class Evento implements IReceita {
     public Evento(String nome, String data, String hora, String local, float precoIngresso) {
 
         this.nome = nome;
-
         try{
             this.data = sdf.parse(data);
         }catch (Exception e){
             System.out.println("Erro na data");
         }
-
         this.hora = hora;
         this.local = local;
         this.precoIngresso = precoIngresso;
@@ -38,17 +36,15 @@ public abstract class Evento implements IReceita {
 
     public abstract boolean taDisponivel(String tipo);
 
-    public abstract float venderIngresso(Ingresso novoIngresso);
+    public abstract boolean venderIngresso(Ingresso novoIngresso);
 
     @Override
     public float cauculaReceita() {
 
         float total = 0;
-
         for (Ingresso atual : ingressosVendidos) {
             total += atual.getValor();
         }
-
         return total;
     }
 
@@ -68,7 +64,7 @@ public abstract class Evento implements IReceita {
     @Override
     public String toString() {
 
-        return "Nome: " + nome + '\n' +
+        return  "Nome: " + nome + '\n' +
                 "Data: " + data + '\n' +
                 "Hora: " + hora + '\n' +
                 "Local: " + local + '\n' +

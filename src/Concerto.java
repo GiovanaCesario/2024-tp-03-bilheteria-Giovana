@@ -25,12 +25,19 @@ public class Concerto extends Evento {
     }
 
     @Override
-    public float venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
+    public boolean venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
 
         if(taDisponivel(novoIngresso.getTipo())) {
             this.ingressosVendidos.add(novoIngresso);
             ingressoVIPvendidos++;
+            return true;
         }
-        return novoIngresso.getValor();
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Tipo: Concerto\n" +
+                super.toString();
     }
 }

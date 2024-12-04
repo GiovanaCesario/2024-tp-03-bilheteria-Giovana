@@ -1,9 +1,7 @@
 package src;
 
 import org.jetbrains.annotations.NotNull;
-
 import javax.swing.*;
-import static java.lang.Math.random;
 
 public class Tela {
 
@@ -85,44 +83,40 @@ public class Tela {
                 possibilities,
                 "Escolha");
 
-        if (tipo == null) clicouCancelar();
+        if (tipo == null) return;
 
-        nome = JOptionPane.showInputDialog("Qual o nome do evento ?");
-        if (nome == null) clicouCancelar();
+        nome = JOptionPane.showInputDialog("Qual o nome do evento?");
+        if (nome == null) return;
 
-        data = JOptionPane.showInputDialog("Qual a data do evento ? (dd/MM/yyyy)");
-        if (data == null) clicouCancelar();
+        data = JOptionPane.showInputDialog("Qual a data do evento? (dd/MM/yyyy)");
+        if (data == null) return;
 
-        hora = JOptionPane.showInputDialog("Qual a hora do evento ? (hh:mm)");
-        if (hora == null) clicouCancelar();
+        hora = JOptionPane.showInputDialog("Qual a hora do evento?");
+        if (hora == null) return;
 
         local = JOptionPane.showInputDialog("Qual o local do evento ?");
-        if (local == null) clicouCancelar();
+        if (local == null) return;
 
-        buffer = JOptionPane.showInputDialog("Qual o preco do ingresso do evento ? (float)");
-
-        if (buffer == null) clicouCancelar();
+        buffer = JOptionPane.showInputDialog("Qual o preco do ingresso do evento? (float)");
+        if (buffer == null) return;
 
         try {
-            assert buffer != null;
             precoIngresso = Float.parseFloat(buffer);
         } catch (NumberFormatException e) {
             System.out.println("Erro na entrada");
         }
 
-        assert tipo != null;
         bilheteria.criarEvento(tipo, nome, data, hora, local, precoIngresso);
     }
 
-    public void venderIngresso(Bilheteria bilheteria) {
+    public Evento achaEvento(Bilheteria bilheteria, String fazendo) {
 
-        if(bilheteria.getEventos().size() == 0) {
+        if(bilheteria.getEventos().isEmpty()) {
             JOptionPane.showMessageDialog(null,
                     "Nao ha nenhum evento cadastrado",
-                    "Vendendo ingressos",
-                    JOptionPane.PLAIN_MESSAGE);
-
-            return;
+                    fazendo,
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
         String[] possibilities = new String[bilheteria.getEventos().size()];
@@ -134,16 +128,23 @@ public class Tela {
 
         nomeEvento = (String) JOptionPane.showInputDialog(
                 null,
-                "Ingresso de qual evento?",
-                "Vendendo ingresso",
+                "Qual o evento?",
+                fazendo,
                 JOptionPane.PLAIN_MESSAGE,
                 null,
                 possibilities,
                 "Escolha");
 
-        if (nomeEvento == null) clicouCancelar();
+        if (nomeEvento == null) return null;
 
-        Evento evento = bilheteria.procuraEvento(nomeEvento);
+        return bilheteria.procuraEvento(nomeEvento);
+    }
+
+
+    public void venderIngresso(Bilheteria bilheteria) {
+
+        Evento evento = achaEvento(bilheteria, "Vendendo ingressos");
+        if(evento == null) return;
 
         String[] possibilities2 = {"Normal",
                 "Meia Entrada",
@@ -159,18 +160,50 @@ public class Tela {
                 "Escolha");
 
         //Clicou em cancelar
-        if (tipo == null) clicouCancelar();
+        if (tipo == null) return;
 
-        bilheteria.venderIngresso(tipo, evento);
+        if (bilheteria.venderIngresso(tipo, evento)) {
+            JOptionPane.showMessageDialog(null,
+                    "Venda realizada com sucesso! \nValor: " +
+                            evento.ingressosVendidos.get(evento.ingressosVendidos.size() - 1).getValor(),
+                    "Sucesso",
+                    JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Venda não pode ser realizada, sem ingressos desse tipo disponiveis.",
+                    "Erro na venda",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public void extratoReceitaEvento(Bilheteria bilheteria) {
+
+        Evento evento = achaEvento(bilheteria, "Obtendo extrato e receita de evento");
+        if (evento != null) {
+            evento.extratoReceita();
+
+            JOptionPane.showMessageDialog(null,
+                    nomeBilheteiro + ", o extrato e receita de "
+                            + evento.getNome() + " foi impreso no terminal.",
+                    "Obtendo extrato e receita de evento",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
     public void listarEventos(Bilheteria bilheteria) {
-        bilheteria.listarEventos();
 
-        JOptionPane.showMessageDialog(null,
-                nomeBilheteiro + ", a lista foi impresa no terminal.",
-                "Lista de eventos",
-                JOptionPane.PLAIN_MESSAGE);
+        if(bilheteria.getEventos().isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Nao ha nenhum evento cadastrado",
+                    "Listando eventos",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            bilheteria.listarEventos();
+            JOptionPane.showMessageDialog(null,
+                    nomeBilheteiro + ", a lista foi impresa no terminal.",
+                    "Lista de eventos",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
     }
 
     public void fechar(@NotNull Bilheteria bilheteria) {

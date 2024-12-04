@@ -25,12 +25,19 @@ public class Teatro extends Evento {
     }
 
     @Override
-    public float venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
+    public boolean venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
 
         if (taDisponivel(novoIngresso.getTipo())) {
             this.ingressosVendidos.add(novoIngresso);
             ingressoMeiaVendidos++;
+            return true;
         }
-        return novoIngresso.getValor();
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Tipo: Teatro\n" +
+                super.toString();
     }
 }

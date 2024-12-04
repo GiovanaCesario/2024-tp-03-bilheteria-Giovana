@@ -26,6 +26,7 @@ public class Main {
                     tela.listarEventos(bilheteria);
                     break;
                 case "Extrato e receita de um evento" :
+                    tela.extratoReceitaEvento(bilheteria);
                     break;
                 case "Fechar" :
                     tela.fechar(bilheteria);
