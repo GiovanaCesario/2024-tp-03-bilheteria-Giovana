@@ -1,21 +1,26 @@
-package src;
+package src.bilheteria;
 
-import org.jetbrains.annotations.NotNull;
+import src.eventos.Evento;
+
 import javax.swing.*;
 
 public class Tela {
 
-    String nomeBilheteiro;
-    String nomeBilheteria;
+    String nomeBilheteiro = "Bilheteiro";
+    String nomeBilheteria = "Bilheteria";
 
     public Tela() {}
 
+    //Se a pessoa clicar em cancelar no menu ou antes encerra a bilheteria
     public void clicouCancelar() {
+        mensagemFechar(nomeBilheteria);
         System.out.println("Encerrando a bilheteria.");
         System.exit(0);
     }
 
-    public Bilheteria criaBilheteria(Bilheteria bilheteria) {
+    public Bilheteria criaBilheteria() {
+
+        Bilheteria bilheteria;
 
         JOptionPane.showMessageDialog(null,
                 "Caro bilheteiro(a), vamos trabalhar!",
@@ -23,7 +28,10 @@ public class Tela {
                 JOptionPane.PLAIN_MESSAGE);
 
         nomeBilheteiro = JOptionPane.showInputDialog("Qual é o seu nome?");
-        if (nomeBilheteiro == null) clicouCancelar();
+        if (nomeBilheteiro == null) {
+            nomeBilheteiro = "Bilheteiro";
+            clicouCancelar();
+        }
 
         nomeBilheteria = JOptionPane.showInputDialog(nomeBilheteiro + ", qual o nome da bilheteria?");
         if (nomeBilheteria == null) clicouCancelar();
@@ -36,7 +44,7 @@ public class Tela {
         return bilheteria;
     }
 
-    public String menu() {
+    public String exibeMenu() {
 
         String opcao;
 
@@ -44,6 +52,7 @@ public class Tela {
                 "Vender ingresso",
                 "Listar eventos",
                 "Extrato e receita de um evento",
+                "Receita total da bilheteria",
                 "Fechar"};
 
         opcao = (String) JOptionPane.showInputDialog(
@@ -83,23 +92,24 @@ public class Tela {
                 possibilities,
                 "Escolha");
 
-        if (tipo == null) return;
+        if (tipo == null) return; //Se apertou em cancelar volta para o menu
 
         nome = JOptionPane.showInputDialog("Qual o nome do evento?");
-        if (nome == null) return;
+        if (nome == null) return; //Se apertou em cancelar volta para o menu
 
         data = JOptionPane.showInputDialog("Qual a data do evento? (dd/MM/yyyy)");
-        if (data == null) return;
+        if (data == null) return; //Se apertou em cancelar volta para o menu
 
         hora = JOptionPane.showInputDialog("Qual a hora do evento?");
-        if (hora == null) return;
+        if (hora == null) return; //Se apertou em cancelar volta para o menu
 
         local = JOptionPane.showInputDialog("Qual o local do evento ?");
-        if (local == null) return;
+        if (local == null) return; //Se apertou em cancelar volta para o menu
 
         buffer = JOptionPane.showInputDialog("Qual o preco do ingresso do evento? (float)");
-        if (buffer == null) return;
+        if (buffer == null) return; //Se apertou em cancelar volta para o menu
 
+        //Passa o preco de String para float
         try {
             precoIngresso = Float.parseFloat(buffer);
         } catch (NumberFormatException e) {
@@ -107,8 +117,26 @@ public class Tela {
         }
 
         bilheteria.criarEvento(tipo, nome, data, hora, local, precoIngresso);
+
+        //Se a data for invalida nao cadastra o evento
+        if(bilheteria.getEventos().get(bilheteria.getEventos().size() - 1).getData() == null) {
+
+            bilheteria.getEventos().remove(bilheteria.getEventos().size() - 1);
+
+            JOptionPane.showMessageDialog(null,
+                    "Evento nao cadastrado, data invalida",
+                    "Cadastrando evento",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Evento cadastrado com sucesso!",
+                    "Cadastrando evento",
+                    JOptionPane.PLAIN_MESSAGE);
+
+        }
     }
 
+    //Quando o usuario precisa escolher entre eventos ja existentes
     public Evento achaEvento(Bilheteria bilheteria, String fazendo) {
 
         if(bilheteria.getEventos().isEmpty()) {
@@ -159,13 +187,13 @@ public class Tela {
                 possibilities2,
                 "Escolha");
 
-        //Clicou em cancelar
-        if (tipo == null) return;
+        if (tipo == null) return; //Clicou em cancelar
 
+        //Verifica se a venda foi possivel e informa o usuario
         if (bilheteria.venderIngresso(tipo, evento)) {
             JOptionPane.showMessageDialog(null,
                     "Venda realizada com sucesso! \nValor: " +
-                            evento.ingressosVendidos.get(evento.ingressosVendidos.size() - 1).getValor(),
+                            evento.getIngressosVendidos().get(evento.getIngressosVendidos().size() - 1).getValor(),
                     "Sucesso",
                     JOptionPane.PLAIN_MESSAGE);
         } else {
@@ -175,6 +203,22 @@ public class Tela {
                     JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    public void mensagemListarEventos(boolean listou) {
+
+        if(!listou) {
+            JOptionPane.showMessageDialog(null,
+                    "Nao ha nenhum evento cadastrado",
+                    "Listando eventos",
+                    JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    nomeBilheteiro + ", a lista foi impresa no terminal.",
+                    "Lista de eventos",
+                    JOptionPane.PLAIN_MESSAGE);
+        }
+    }
+
 
     public void extratoReceitaEvento(Bilheteria bilheteria) {
 
@@ -190,28 +234,24 @@ public class Tela {
         }
     }
 
-    public void listarEventos(Bilheteria bilheteria) {
 
-        if(bilheteria.getEventos().isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "Nao ha nenhum evento cadastrado",
-                    "Listando eventos",
-                    JOptionPane.ERROR_MESSAGE);
-        } else {
-            bilheteria.listarEventos();
-            JOptionPane.showMessageDialog(null,
-                    nomeBilheteiro + ", a lista foi impresa no terminal.",
-                    "Lista de eventos",
-                    JOptionPane.PLAIN_MESSAGE);
-        }
-    }
+    public void mensagemReceitaTotal(String nomeBilheteria) {
 
-    public void fechar(@NotNull Bilheteria bilheteria) {
         JOptionPane.showMessageDialog(null,
-                "Até mais " + nomeBilheteiro + ", caro bilheteiro(a). Tenha um otimo dia!",
-                "Fechando a " + bilheteria.getNome(),
+                nomeBilheteiro + ", a receita de "
+                        + nomeBilheteria + " foi impressa no terminal.",
+                "Obtendo a receita da bilheteria",
                 JOptionPane.PLAIN_MESSAGE);
     }
+
+
+    public void mensagemFechar(String nomeBilheteria) {
+        JOptionPane.showMessageDialog(null,
+                "Até mais " + nomeBilheteiro + ", caro bilheteiro(a). Tenha um otimo dia!",
+                "Fechando a " + nomeBilheteria,
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
 
     public String getNomeBilheteiro() { return nomeBilheteiro; }
 

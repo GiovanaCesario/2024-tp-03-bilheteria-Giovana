@@ -1,6 +1,6 @@
-package src;
+package src.eventos;
 
-import java.util.Date;
+import src.ingresso.Ingresso;
 
 public class Filme extends Evento {
 
@@ -15,6 +15,7 @@ public class Filme extends Evento {
 
         if(super.disponibilidade() <= 0) return false;
 
+        // Cinema não deve permitir a compra de ingressos VIP
         return !tipoIngresso.equals("VIP");
     }
 

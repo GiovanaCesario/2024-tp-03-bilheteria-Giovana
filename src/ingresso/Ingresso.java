@@ -1,8 +1,10 @@
-package src;
+package src.ingresso;
+
+import src.interfaces.IReceita;
 
 import java.util.Date;
 
-public class Ingresso implements IReceita{
+public class Ingresso implements IReceita {
 
     private Date dataVenda;
     private float valor;

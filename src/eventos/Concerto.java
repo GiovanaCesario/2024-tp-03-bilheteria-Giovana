@@ -1,6 +1,6 @@
-package src;
+package src.eventos;
 
-import java.util.Date;
+import src.ingresso.Ingresso;
 
 public class Concerto extends Evento {
 
@@ -18,6 +18,7 @@ public class Concerto extends Evento {
 
         if(super.disponibilidade() <= 0) return false;
 
+        //Shows deverão ocupar no máximo 10% dos ingressos totais com ingressos VIP
         if(tipoIngresso.equals("VIP")) {
             return !(ingressoVIPvendidos >= super.getCapacidade() * 0.10);
         }

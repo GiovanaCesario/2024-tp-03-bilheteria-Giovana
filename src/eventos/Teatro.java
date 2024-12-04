@@ -1,6 +1,6 @@
-package src;
+package src.eventos;
 
-import java.util.Date;
+import src.ingresso.Ingresso;
 
 public class Teatro extends Evento {
 
@@ -18,6 +18,7 @@ public class Teatro extends Evento {
 
         if(super.disponibilidade() <= 0) return false;
 
+        // Teatro poderão ocupar no maximo 20% dos ingressos totais com meia-entrada
         if(tipoIngresso.equals("Meia Entrada")) {
             return !(ingressoMeiaVendidos >= super.getCapacidade() * 0.20);
         }

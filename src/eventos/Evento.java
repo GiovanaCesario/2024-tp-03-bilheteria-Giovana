@@ -1,4 +1,7 @@
-package src;
+package src.eventos;
+
+import src.interfaces.IReceita;
+import src.ingresso.Ingresso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ public abstract class Evento implements IReceita {
     private Date data;
     private String hora;
     private String local;
-    private int capacidade;
+    private int capacidade; //O filme tem capacidade de 200 ingressos, o teatro 250, e o concerto 150
     private float precoIngresso;
     protected List<Ingresso> ingressosVendidos;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -19,11 +22,14 @@ public abstract class Evento implements IReceita {
     public Evento(String nome, String data, String hora, String local, float precoIngresso) {
 
         this.nome = nome;
+
+        // Passa a data de String para o tipo Date
         try{
             this.data = sdf.parse(data);
         }catch (Exception e){
             System.out.println("Erro na data");
         }
+
         this.hora = hora;
         this.local = local;
         this.precoIngresso = precoIngresso;
@@ -69,8 +75,8 @@ public abstract class Evento implements IReceita {
                 "Hora: " + hora + '\n' +
                 "Local: " + local + '\n' +
                 "Capacidade: " + capacidade + '\n' +
-                "PrecoIngresso: " + precoIngresso + '\n' +
-                "Receita: " +cauculaReceita() + '\n';
+                "PrecoIngresso: " + precoIngresso + "\n\n" +
+                "Receita: " +cauculaReceita();
     }
 
     public String getNome() { return nome; }
@@ -85,6 +91,8 @@ public abstract class Evento implements IReceita {
 
     public float getPrecoIngresso() { return precoIngresso; }
 
+    public List<Ingresso> getIngressosVendidos() { return ingressosVendidos; }
+
 
     public void setNome(String nome) { this.nome = nome; }
 
@@ -97,4 +105,6 @@ public abstract class Evento implements IReceita {
     public void setCapacidade(int capacidade) { this.capacidade = capacidade; }
 
     public void setPrecoIngresso(float precoIngresso) { this.precoIngresso = precoIngresso; }
+
+    public void setIngressosVendidos(List<Ingresso> ingressosVendidos) { this.ingressosVendidos = ingressosVendidos; }
 }
