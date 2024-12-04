@@ -24,7 +24,7 @@ public class Ingresso implements IReceita {
 
     @Override
     public void extratoReceita() {
-        System.out.println(toString());
+        System.out.println(this);
     }
 
     @Override
