@@ -4,9 +4,33 @@ import java.util.Date;
 
 public class Teatro extends Evento {
 
-    public Teatro(String nome, Date data, String hora, String local, float precoIngresso) {
+    private int ingressoMeiaVendidos;
+
+    public Teatro(String nome, String data, String hora, String local, float precoIngresso) {
 
         super(nome, data, hora, local, precoIngresso);
-        super.setQuantIngressos(250);
+        super.setCapacidade(250);
+        ingressoMeiaVendidos = 0;
+    }
+
+    @Override
+    public boolean taDisponivel(String tipoIngresso) {
+
+        if(super.disponibilidade() <= 0) return false;
+
+        if(tipoIngresso.equals("Meia Entrada")) {
+            return !(ingressoMeiaVendidos >= super.getCapacidade() * 0.20);
+        }
+        return true;
+    }
+
+    @Override
+    public float venderIngresso(@org.jetbrains.annotations.NotNull Ingresso novoIngresso) {
+
+        if (taDisponivel(novoIngresso.getTipo())) {
+            this.ingressosVendidos.add(novoIngresso);
+            ingressoMeiaVendidos++;
+        }
+        return novoIngresso.getValor();
     }
 }
